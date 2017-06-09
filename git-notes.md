@@ -30,6 +30,8 @@
     >git branch 查看分支信息   
     git checkout -b branch-name 创建并切换到分支branch-name等效于 git branch branch-name; git checkout branch-name   
     git branch -d branch-name 删除分支branch
+- git fetch
+    >从远程取下所有更新，在origin/branch中，可输入git branch -a 查看。 （.git/FETCH_HEAD）  
 - other
     >git merge branch-name; 合并branc-name到当前分支  
     git pull； 从remote repository 更新当前locoal repository、index、workstation
