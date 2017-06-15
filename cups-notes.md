@@ -1,4 +1,4 @@
-#Tips: 
+#Tips:  
     Looking for compile instructions?  Read the file "INSTALL.txt" instead...  
     哈～The tial of this file, recoder some trouble when i use cups.(FAQ)
 #CUPS INTRODUCTION
@@ -143,37 +143,37 @@
     This will prevent the filters from misinterpreting your print
     file.
 #FAQ:
-- cups是做啥的？ 
-        cups用来管理配置系统可以连接或者扫描到的打印机,并且可以作为一个server将所管理的打印机共享出去
-    从而供windos和unix系统访问.支持IPP，AppSOCKET，USB, LPD打印协议。
-- cups如何共享打印机
-    访问localhost:631，在administration的server栏勾选共享，并在添加打印机的时候勾选 shared this printer.
-- cups添加本地直连打印机.
-        以我的hp1106打印机为例。接上USB的hp1106打印机后，访问http://localhost:631,在添加界面就可以看
-    到改型号的打印机，一路狂点下去，选对对应型号的ppd，并且勾选共享。
-    或者使用lpadmin -p hp1106 -v "usb://xxxxx" -P xxx.ppd
-- 打印时报错：required plugin
-        hp1160型号的驱动ppd文件后面会显示required plugin，此时如果没有 plugin，则
-    添加后的打印机打印时会报错required plugin,并在打印状态栏显示STOP filter failed，
-    解决方法：运行hp-setup，添加改打印机，过程中会 自动补齐plugin）
-- 如何cups添加windows共享的打印机
-       NFS,是unix-like之间的共享，CIFS用于windows间的共享（如网络邻居），而SAMBA用于windows和unix-like间
-    共享文件和打印机。所以在确保samba服务的正常以及权限后，在添加打印机时选择Window via of samba。然后输入
-    共享的打印机连接，选择合适的驱动，需要共享的则勾选共享(共享后别的系统可以通过这台机子访问该打印机，而不必
-    去访问windos上)。
-    eg1. 连接市场销售部门的HP-M1530, 
-        1.选择window via of samba。 
+- cups是做啥的？  
+        cups用来管理配置系统可以连接或者扫描到的打印机,并且可以作为一个server将所管理的打印机共享出去    
+    从而供windos和unix系统访问.支持IPP，AppSOCKET，USB, LPD打印协议。    
+- cups如何共享打印机    
+    访问localhost:631，在administration的server栏勾选共享，并在添加打印机的时候勾选 shared this printer.    
+- cups添加本地直连打印机.    
+        以我的hp1106打印机为例。接上USB的hp1106打印机后，访问http://localhost:631,在添加界面就可以看    
+    到改型号的打印机，一路狂点下去，选对对应型号的ppd，并且勾选共享。    
+    或者使用lpadmin -p hp1106 -v "usb://xxxxx" -P xxx.ppd    
+- 打印时报错：required plugin    
+        hp1160型号的驱动ppd文件后面会显示required plugin，此时如果没有 plugin，则    
+    添加后的打印机打印时会报错required plugin,并在打印状态栏显示STOP filter failed，    
+    解决方法：运行hp-setup，添加改打印机，过程中会 自动补齐plugin）    
+- 如何cups添加windows共享的打印机    
+       NFS,是unix-like之间的共享，CIFS用于windows间的共享（如网络邻居），而SAMBA用于windows和unix-like间    
+    共享文件和打印机。所以在确保samba服务的正常以及权限后，在添加打印机时选择Window via of samba。然后输入    
+    共享的打印机连接，选择合适的驱动，需要共享的则勾选共享(共享后别的系统可以通过这台机子访问该打印机，而不必    
+    去访问windos上)。    
+    eg1. 连接市场销售部门的HP-M1530,     
+        1.选择window via of samba。     
         2.再uri处要填写正确，特比注意用户权限以及路径空格问题
-        smb://usrname:passowrd@Ipaddress/PRINTER-VENDOR ,勾选共享。
-        3.没找到对应的驱动，也懒得下载，于是就使用2727驱动，竟然可以诶。哈哈。
-    command line: 
-    smbcilent -L 192.168.0.9 //用来搜寻改ip下的共享
+        smb://usrname:passowrd@Ipaddress/PRINTER-VENDOR ,勾选共享。    
+        3.没找到对应的驱动，也懒得下载，于是就使用2727驱动，竟然可以诶。哈哈。    
+    command line:     
+    smbcilent -L 192.168.0.9 //用来搜寻改ip下的共享    
     lpadmin -p HP-MP1530 -v "smb:/usrname:passowrd@192.168.0.223/HP-LaserJet-M1530-MFP-Series-PCL-6" -E -P /usr/share/ppd/HP/hp-laserjet_m2727_mfp_series-ps.ppd.gz -o printer-is-shared=true
-    tips： -E == cupsenable 和 cupsaccpte;没有-E 则打印机状态显示PAUSE
-- Session setup failed: NT_STATUS_LOGON_FAILURE
-    这个是samba连接中的usrname:password权限问题。使用合适的usrname和password
-- Tree connect Failed NT_STATUS_ACCESS_DENIED
-    这个是samba连接中的路径写错了，或者共享打印机名字没输入对。（尽量避免空格)
+    tips： -E == cupsenable 和 cupsaccpte;没有-E 则打印机状态显示PAUSE    
+- Session setup failed: NT_STATUS_LOGON_FAILURE    
+    这个是samba连接中的usrname:password权限问题。使用合适的usrname和password    
+- Tree connect Failed NT_STATUS_ACCESS_DENIED    
+    这个是samba连接中的路径写错了，或者共享打印机名字没输入对。（尽量避免空格)    
 #实例：
 ## 在我的192.168.0.9的fedrao系统上添加：
     windows的HP-M1530
