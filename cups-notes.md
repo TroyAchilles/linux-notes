@@ -1,7 +1,7 @@
-#Tips:  
+# Tips:   
     Looking for compile instructions?  Read the file "INSTALL.txt" instead...  
     哈～The tial of this file, recoder some trouble when i use cups.(FAQ)
-#CUPS INTRODUCTION
+# CUPS INTRODUCTION
   
     CUPS(CommonUnixPrinterSystem) is a standards-based, open source printing system developed by Apple
     Inc. for OS® X and other UNIX®-like operating systems.  CUPS uses the
@@ -23,7 +23,7 @@
     information.
 
 
-#READING THE DOCUMENTATION
+# READING THE DOCUMENTATION
 
     Once you have installed the software you can access the documentation (and
     a bunch of other stuff) online at:
@@ -36,7 +36,7 @@
     Please read the documentation before asking questions.
 
 
-#GETTING SUPPORT AND OTHER RESOURCES
+# GETTING SUPPORT AND OTHER RESOURCES
 
     If you have problems, READ THE DOCUMENTATION FIRST!  We also provide many
     discussion forums which are available at:
@@ -46,7 +46,7 @@
     See the CUPS web site at "http://www.cups.org/" for other resources.
 
 
-#SETTING UP PRINTER QUEUES USING YOUR WEB BROWSER
+# SETTING UP PRINTER QUEUES USING YOUR WEB BROWSER
 
     CUPS includes a web-based administration tool that allows you to manage
     printers, classes, and jobs on your server.  Open the following URL in your
@@ -64,7 +64,7 @@
     administrative function.
 
 
-#SETTING UP PRINTER QUEUES FROM THE COMMAND-LINE
+# SETTING UP PRINTER QUEUES FROM THE COMMAND-LINE
 
     CUPS works best with PPD (PostScript Printer Description) files.  In a pinch
     you can also use System V style printer interface scripts.
@@ -117,7 +117,7 @@
 	http://www.cups.org/links.php    Links to other drivers
 
 
-#PRINTING FILES
+# PRINTING FILES
 
     CUPS provides both the System V "lp" and Berkeley "lpr" commands for
     printing:
@@ -142,7 +142,7 @@
 
     This will prevent the filters from misinterpreting your print
     file.
-#FAQ:
+# FAQ:
 - cups是做啥的？  
         cups用来管理配置系统可以连接或者扫描到的打印机,并且可以作为一个server将所管理的打印机共享出去    
     从而供windos和unix系统访问.支持IPP，AppSOCKET，USB, LPD打印协议。    
@@ -174,7 +174,7 @@
     这个是samba连接中的usrname:password权限问题。使用合适的usrname和password    
 - Tree connect Failed NT_STATUS_ACCESS_DENIED    
     这个是samba连接中的路径写错了，或者共享打印机名字没输入对。（尽量避免空格)    
-#实例：
+# 实例：
 ## 在我的192.168.0.9的fedrao系统上添加：
     windows的HP-M1530
     lpadmin -p HP-M1530 -v "smb:/usrname:passowrd@192.168.0.223/HP-LaserJet-M1530-MFP-Series-PCL-6" -E -P /usr/share/ppd/HP/hp-laserjet_m2727_mfp_series-ps.ppd.gz
