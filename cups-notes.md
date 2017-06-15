@@ -41,7 +41,7 @@
     If you have problems, READ THE DOCUMENTATION FIRST!  We also provide many
     discussion forums which are available at:
 
-	http://www.cups.org/newsgroups.php
+	[http://www.cups.org/newsgroups.php](http://www.cups.org/newsgroups.php)
 
     See the CUPS web site at "http://www.cups.org/" for other resources.
 
