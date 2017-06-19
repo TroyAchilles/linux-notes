@@ -181,6 +181,6 @@
      -o printer-is-shared=true
     添加直连的hp1106,因为plugin的问题，于是使用hp-setup来添加hp1106.
 ## 在192.168.0.135的开发板上，使用192.168.0.9共享出来的windows HP-M1530和linux hp1106打印机。
-    lp -h 192.168.0.9:631 -p hp1106 xxx.ps
-    lp -h 192.168.0.9:631 -p HP-M1530 xxx.ps
+    lp -h 192.168.0.9:631 -d hp1106 xxx.ps
+    lp -h 192.168.0.9:631 -d HP-M1530 xxx.ps
     好爽，可以直接通过192.168.0.9来直接使用局域网内的linux和windows打印机啦～～～～
