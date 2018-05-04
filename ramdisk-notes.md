@@ -5,11 +5,13 @@
     > 这在Linux内核2.0/2.2就已经支持，其不足之处是大小固定，之后不能改变。为了能够使用Ramdisk，  
     我们在编译内核时须将block device中的Ramdisk支持选上，它下面还有两个选项，一个是设定Ramdisk的大小，  
     默认是4096k;另一个是initrd的支持。如果对Ramdisk的支持已经编译进内核，我们就可以使用它了:         
-    >   > ls /dev/ram* //查看一下可用的RamDisk               
+        *ls /dev/ram* //查看一下可用的RamDisk               
         mkdir /mnt/test;                  
         mke2fs /dev/ram0; //对ram0创建文件系统           
         mount /dev/ram /mnt/test; // 挂载, 可以象对普通硬盘一样对它进行操作了
-    **装载后写入速度在700M/S-800M/S之间，如果umount再加载，只要不重启linux，那文件依然会保存在/dev/ramX中。**
+        
+        
+        装载后写入速度在700M/S-800M/S之间，如果umount再加载，只要不重启linux，那文件依然会保存在/dev/ramX中。**
 
 - 另两种则是内核2.4才支持的，通过Ramfs或者Tmpfs来实现
     > 它们不需经过格式化，用起来灵活，其大小随所需要的空间而增加或减少。Ramfs顾名思义是内存文件系统，   
