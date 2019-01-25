@@ -1,0 +1,635 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><link href="cmake%E6%95%99%E7%A8%8B_files/default.css" rel="stylesheet" id="lhgdialoglink">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>cmake教程.pdf</title>
+<meta name="keywords" content="教程">
+<meta name="description" content="cmake教程.pdf,前言cmake已经开发了5,6年的时间，如果没有KDE4，也许不会有人或者Linux发行版本重视cmake，因为除了Kitware似乎没有人使用它。通过KDE4的选型和开发，cmake逐渐进入了人们的视线，在实际的使用过程中，cmake的优势也逐渐的被大家所认识，至少KDE的开发者们给予了cmake极高的评价，同时庞大的KDE项目使用cmake来作为构建工具也证明了cmake的可用性和大项目管理能力。所以，cmake应该感谢KDE，也正因为如此，cmake的开发者投入了KDE从autotools">
+<meta name="copyright" content="max.book118.com">
+<meta name="applicable-device" content="pc">
+<link rel="shortcut icon" href="https://max.book118.com/favicon.ico">
+<link rel="alternate" media="only screen and (max-width: 640px)" href="https://m.book118.com/html/2017/0609/112819683.shtm">
+<link href="cmake%E6%95%99%E7%A8%8B_files/common.css" rel="stylesheet" type="text/css">
+<link href="cmake%E6%95%99%E7%A8%8B_files/article_002.css" rel="stylesheet" type="text/css">
+<link href="cmake%E6%95%99%E7%A8%8B_files/comment.css" rel="stylesheet" type="text/css">
+<link href="cmake%E6%95%99%E7%A8%8B_files/jquery.css" rel="stylesheet" type="text/css">
+<script src="cmake%E6%95%99%E7%A8%8B_files/push.js"></script><script src="cmake%E6%95%99%E7%A8%8B_files/hm.js"></script><script language="javascript" type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/jquery-1.js"></script>
+<script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/lhgdialog.js"></script>
+<script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/book118ajax2.js"></script>
+<script language="javascript" type="text/javascript">
+var searcherpushURL = "/index.php?m=Search&a=push";
+var s_spm = 'baidu-0000-0000-0000-0000';
+</script>
+<script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/show.js"></script>
+<script language="javascript" type="text/javascript">
+$(document).ready(function(){
+	//加载文档
+	$.getJSON("/index.php?m=Ajax&a=hits&aid=112819683&mid=3948853&t="+Math.random(),function(json){
+        $(".needmoney").html(json.money);
+    });
+});
+function CheckLogin(){
+	var taget_obj = document.getElementById('_userlogin');
+	myajax = new Book118Ajax(taget_obj,false,false,'','','');
+	myajax.SendGet2("/index.php?m=Ajax&a=userStat");
+	book118XHTTP = null;
+}
+function CheckCommentLogin(){
+	var taget_obj = document.getElementById('_ajax_feedback');
+	myajax = new Book118Ajax(taget_obj,false,false,'','','');
+	myajax.SendGet2("/index.php?m=FeedBack&a=checkLogin");
+	book118XHTTP = null;
+}
+function postBadGood(ftype,fid){
+	var taget_obj = document.getElementById(ftype+fid);
+	var saveid = GetCookie('badgoodid');
+	if(saveid != null)
+	{
+		var saveids = saveid.split(',');
+		var hasid = false;
+		saveid = '';
+		j = 1;
+		for(i=saveids.length-1;i>=0;i--)
+		{
+			if(saveids[i]==fid && hasid) continue;
+			else {
+				if(saveids[i]==fid && !hasid) hasid = true;
+				saveid += (saveid=='' ? saveids[i] : ','+saveids[i]);
+				j++;
+				if(j==10 && hasid) break;
+				if(j==9 && !hasid) break;
+			}
+		}
+		if(hasid) { alert('您刚才已表决过了喔！'); return false;}
+		else saveid += ','+fid;
+		SetCookie('badgoodid',saveid,1);
+	}
+	else
+	{
+		SetCookie('badgoodid',fid,1);
+	}
+	myajax = new Book118Ajax(taget_obj,false,false,'','','');
+	myajax.SendGet2("/index.php?m=FeedBack&a=detail&aid="+fid+"&action="+ftype+"&fid="+fid);
+}
+function postDigg(ftype,aid)
+{
+	var taget_obj = document.getElementById('vote');
+	var saveid = GetCookie('diggid');
+	if(saveid != null)
+	{
+		var saveids = saveid.split(',');
+		var hasid = false;
+		saveid = '';
+		j = 1;
+		for(i=saveids.length-1;i>=0;i--)
+		{
+			if(saveids[i]==aid && hasid) continue;
+			else {
+				if(saveids[i]==aid && !hasid) hasid = true;
+				saveid += (saveid=='' ? saveids[i] : ','+saveids[i]);
+				j++;
+				if(j==20 && hasid) break;
+				if(j==19 && !hasid) break;
+			}
+		}
+		if(hasid) { alert("您已经顶过该帖，请不要重复顶帖 ！"); return; }
+		else saveid += ','+aid;
+		SetCookie('diggid',saveid,1);
+	}
+	else
+	{
+		SetCookie('diggid',aid,1);
+	}
+	myajax = new Book118Ajax(taget_obj,false,false,'','','');
+	var url = "/index.php?m=Ajax&a=digg&type="+ftype+"&aid="+aid;
+	myajax.SendGet2(url);
+}
+function getDigg(aid)
+{
+	var taget_obj = document.getElementById('newdigg');
+	myajax = new Book118Ajax(taget_obj,false,false,'','','');
+	myajax.SendGet2("/index.php?m=Ajax&a=digg&type=get&aid="+aid);
+	book118XHTTP = null;
+}
+var funDoLogin = function(callback) {
+	$.dialog({
+	    title:"用户登录",
+		lock: true,
+	    content: "url:/index.php?m=Down&a=prompt&id=112819683",
+	    max: false,
+	    min: false
+	});
+};
+var downPrompt = function() {
+    window.location.href="/index.php?m=Download&id=112819683";
+	/**
+    $(getDocViewer()).css('visibility', 'hidden');
+	$.dialog({
+	    title:"文档下载",
+		lock: true,
+	    content: "url:/index.php?m=Down&a=prompt&id=112819683",
+	    max: false,
+	    min: false,
+		init:function(){
+			//$(getDocViewer()).css('visibility', 'hidden');
+		},
+		close:function(){
+			$(getDocViewer()).css('visibility', '');
+		}
+	});
+    **/
+};
+
+var doFavorite = function(){
+//	$(getDocViewer()).css('visibility', 'hidden');
+	$.dialog({
+	    title:"文档收藏",
+	    content: "url:/index.php?m=Fav&a=doFav&id=112819683",
+	    max: false,
+	    min: false,
+		init:function(){
+			//$(getDocViewer()).css('visibility', 'hidden');
+		},
+		close:function(){
+//			$(getDocViewer()).css('visibility', '');
+		}
+	});
+}
+
+var complaint = function(){
+//	$(getDocViewer()).css('visibility', 'hidden');
+	$.dialog({
+	    title:"文档投诉/纠错",
+		lock: true,
+	    content: "url:/index.php?m=Complaint&a=show&id=112819683",
+	    max: false,
+	    min: false,
+		init:function(){
+			//$(getDocViewer()).css('visibility', 'hidden');
+		},
+		close:function(){
+//			$(getDocViewer()).css('visibility', '');
+		}
+	});
+}
+
+var initStar = function(){
+	var options	= {
+		value:0,
+	    max : 5,
+	    url : '/index.php?m=Star&a=doStar&id=112819683',
+	    after_ajax  : function(ret) {
+	        $.dialog.tips(ret.ajax, 3, 'success.gif', function(){
+			});
+			this.value  = ret.value;
+	        this.enabled= false;
+	        $('#rateContainer').rater(this);
+	    },
+		image: '/statics/book118/js/star/star.gif'
+	}
+	$('#rateContainer').rater(options);
+}
+
+jQuery().ready(function(){
+	CheckLogin();
+	//CheckCommentLogin();
+	//ajaxFeedBackForm();
+	//initStar();
+
+	$(".favorite").click(function(){
+		doFavorite();
+	});
+	//投诉
+	$(".complaint").click(function(){
+	    complaint();
+	});
+});
+</script>
+<script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/flexpaper_flash.js"></script>
+<link href="cmake%E6%95%99%E7%A8%8B_files/article.css" rel="stylesheet" type="text/css"><link href="cmake%E6%95%99%E7%A8%8B_files/jquery-ui.css" rel="stylesheet" type="text/css"><script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/qrcode.js"></script><script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/customer_002.js"></script><script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/paradigmsdk.js"></script><script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/readmore.js"></script><link rel="stylesheet" type="text/css" href="cmake%E6%95%99%E7%A8%8B_files/readmore.css"><script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/scz-zip.js"></script><link rel="stylesheet" type="text/css" href="cmake%E6%95%99%E7%A8%8B_files/scz-zip.css"><link rel="stylesheet" href="cmake%E6%95%99%E7%A8%8B_files/layer_002.css" id="layuicss-skinlayercss"><script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/payReading.js"></script><link rel="stylesheet" type="text/css" href="cmake%E6%95%99%E7%A8%8B_files/payReading.css"><script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/customer.js"></script><link rel="stylesheet" type="text/css" href="cmake%E6%95%99%E7%A8%8B_files/customer.css"><script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/viewLogin.js"></script><script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/download.js"></script></head>
+<body><div style="left: 0px; top: 0px; visibility: hidden; position: absolute;" class=""><table class="ui_border"><tbody><tr><td class="ui_lt"></td><td class="ui_t"></td><td class="ui_rt"></td></tr><tr><td class="ui_l"></td><td class="ui_c"><div class="ui_inner"><table class="ui_dialog"><tbody><tr><td colspan="2"><div class="ui_title_bar"><div class="ui_title" unselectable="on" style="cursor: move;"></div><div class="ui_title_buttons"><a class="ui_min" href="javascript:void(0);" title="最小化" style="display: inline-block;"><b class="ui_min_b"></b></a><a class="ui_max" href="javascript:void(0);" title="最大化" style="display: inline-block;"><b class="ui_max_b"></b></a><a class="ui_res" href="javascript:void(0);" title="还原"><b class="ui_res_b"></b><b class="ui_res_t"></b></a><a class="ui_close" href="javascript:void(0);" title="关闭(esc键)" style="display: inline-block;">×</a></div></div></td></tr><tr><td class="ui_icon" style="display: none;"></td><td class="ui_main" style="width: auto; height: auto;"><div class="ui_content" style="padding: 10px;"></div></td></tr><tr><td colspan="2"><div class="ui_buttons" style="display: none;"></div></td></tr></tbody></table></div></td><td class="ui_r"></td></tr><tr><td class="ui_lb"></td><td class="ui_b"></td><td class="ui_rb" style="cursor: se-resize;"></td></tr></tbody></table></div>
+<!-- /header 开始 -->
+<script language="javascript" type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/jquery.js"></script>
+<div id="head_k">
+  <div class="headBox">
+    <div class="logo_k" id="logo_common"><a href="https://max.book118.com/"><img src="cmake%E6%95%99%E7%A8%8B_files/doc_logo.gif" alt="logo"></a></div>
+    <div class="quick_link" id="_userlogin"><a href="https://max.book118.com/index.php?g=Home&amp;m=AssocWeixin&amp;a=index">关注公众号</a><a href="https://max.book118.com/index.php?g=Home&amp;m=Suggest&amp;a=browse">浏览足迹</a><a href="javascript:;" id="dla">登录</a><a href="https://max.book118.com/index.php?m=Recharge&amp;g=User&amp;a=index">充值</a><a href="https://max.book118.com/help.html" target="_blank">常见问题</a></div>
+    <ul id="nav">
+      <li><a href="https://max.book118.com/" class="on"><span>首页</span></a></li>
+      <li><a href="https://max.book118.com/html/docs/"><span>浏览文档</span></a></li>
+	  <li><a href="https://max.book118.com/topics/list.html"><span>文档专题</span></a></li>
+      <li><a href="https://max.book118.com/index.php?g=User&amp;m=Document&amp;a=sold"><span>我的文档</span></a></li>
+      <li class="upload"><a href="https://max.book118.com/index.php?g=User&amp;m=Upload&amp;a=index"><span>我要上传</span></a></li>
+    </ul>
+  </div>
+</div>
+<!-- /search 开始 -->
+<form action="/index.php?m=Search&amp;a=index" method="post" target="">
+  <div class="searchBox" id="searchBox">
+    <div class="searchNew">
+      <div class="searchbar"><input id="newTopSearch" maxlength="100" class="listTopDefault" name="q" autocomplete="off" value="cmake教程" type="text"><input name="s" value="4705696648556193051" type="hidden"><input class="btn" value="搜索" type="submit"><a href="https://max.book118.com/member/search-hot-p1.html" style="margin-left:20px" title="关键词搜索排行榜，用户最想要的文档">搜索风云</a></div>
+    </div>
+  </div>
+</form>
+<script language="javascript" type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/jquery_002.js"></script>
+<script>
+$(function(){
+    var url_ = "/index.php?m=Search&a=suggest";
+    $("#topsearch").bigAutocomplete({url:url_});
+})
+</script>
+<!-- /search 结束-->
+<!-- /header 结束-->
+<div id="global_help" class="global_scroll"><div class="btns"><a href="javascript:void(0)" id="last_help" title="向上滚动" style="cursor: pointer;"></a><a href="javascript:void(0)" id="next_help" title="向下滚动" style="cursor: pointer;"></a></div><strong>你知道吗？</strong><div class="help_lists"><ul style="margin-top: 0px;"><li>4.本站允许任何人、任何时间来上传文档，但本站坚决拒绝非法、垃圾、侵犯他人出版利益、影响别人毕业答辩、职位评定等情形出现。详情参看本站规定。</li><li>5.本站后期可能会打算推出原创文档可以提前预支未来收益，享受马上变现的特殊权限。</li><li>6.本站还推出了悬赏问答网，后面我们还会推出资料打包下载赚钱网、经验赚钱网、视频教程网等等以及更多的赚钱网，望有志之士加入我们、关注我们；</li><li>7.本站支持游客下载，支持微信、支付宝、QQ钱包三大支付，下载后建议填写邮箱或者手机号码，以供下载地址备份；</li><li>8.支付成功后，一般等待不超过10秒，就能弹出下载保存框，；如果超过这个时间，你可以在线联系客服；</li><li>9.下载前一定要尽到预览义务，下载下来的文档和预览的文档是一样的（除原创）。一个文档一旦付费，可以支持无限次重复下载该文档，无须重复付费；</li><li>10.本站开启认领文档功能，如果您是原创作者，就请前来认领，既往所有下载收益以及未来的收益都归您，坐享问答咨询、商机合作等附加溢出价值；</li><li>1.本站所有文档（除原创和独家性质文档）都是全文免费阅读的，数据显示99.8%的用户不会付费下载，付费下载也限制了源文档到处流传的可能性；</li><li>2.如果你急需要某个文档而在本站找不到，你可以发布文档悬赏求助，建议50元人民币起，方能引起帮助者的极大兴趣；</li><li>3.如果你有更好的文档（本站没有的，特别欢迎上传原创文档），您也可以上传上来赚钱哦。分享知识的同时也可以坐享永久收益，赚点电费、奶粉钱何尝不可；</li></ul></div></div><div id="global_ask" class="global_scroll"><div class="btns"><a href="javascript:void(0)" id="last_ask" title="向上滚动" style="cursor: pointer;"></a><a href="javascript:void(0)" id="next_ask" title="向下滚动" style="cursor: pointer;"></a></div><a class="to-ask" href="http://ask.book118.com/" target="_blank">悬赏问答</a><div class="ask_lists"><ul style="margin-top: 0px;"><li><a href="http://ask.book118.com/q/3248.html" target="_blank" class="ask_item_a"><dl class="ask_item"><dt>运筹学-第三版练习习题</dt><dd>悬赏人民币：<span style="color:#fa0000;font-weight:bold;">3元</span></dd><dd>提问时间：2018-11-16</dd><dd>浏览量：646次</dd></dl></a></li><li><a href="http://ask.book118.com/q/3247.html" target="_blank" class="ask_item_a"><dl class="ask_item"><dt>求2019福建高职第一次质量检查信息技术卷全文及答案</dt><dd>悬赏人民币：<span style="color:#fa0000;font-weight:bold;">50元</span></dd><dd>提问时间：2018-11-16</dd><dd>浏览量：376次</dd></dl></a></li><li><a href="http://ask.book118.com/q/3243.html" target="_blank" class="ask_item_a"><dl class="ask_item"><dt>求电子科技大学往年线性系统理论与随机过程考博真题</dt><dd>悬赏人民币：<span style="color:#fa0000;font-weight:bold;">100元</span></dd><dd>提问时间：2018-11-15</dd><dd>浏览量：1297次</dd></dl></a></li><li><a href="http://ask.book118.com/q/3237.html" target="_blank" class="ask_item_a"><dl class="ask_item"><dt>Aluminum-Silicon Casting Alloys Atlas of Microstructures</dt><dd>悬赏人民币：<span style="color:#fa0000;font-weight:bold;">50元</span></dd><dd>提问时间：2018-11-14</dd><dd>浏览量：1209次</dd></dl></a></li><li><a href="http://ask.book118.com/q/3235.html" target="_blank" class="ask_item_a"><dl class="ask_item"><dt>设计四驱车仿真</dt><dd>悬赏人民币：<span style="color:#fa0000;font-weight:bold;">20元</span></dd><dd>提问时间：2018-11-14</dd><dd>浏览量：621次</dd></dl></a></li><li><a href="http://ask.book118.com/q/3231.html" target="_blank" class="ask_item_a"><dl class="ask_item"><dt>【吉林省控制公立医院医疗费用不合理增长实施方案】吉卫联发[2016]3号文件</dt><dd>悬赏人民币：<span style="color:#fa0000;font-weight:bold;">5元</span></dd><dd>提问时间：2018-11-14</dd><dd>浏览量：1882次</dd></dl></a></li><li><a href="http://ask.book118.com/q/3229.html" target="_blank" class="ask_item_a"><dl class="ask_item"><dt>最优化理论和方法试题</dt><dd>悬赏人民币：<span style="color:#fa0000;font-weight:bold;">10元</span></dd><dd>提问时间：2018-11-14</dd><dd>浏览量：1053次</dd></dl></a></li><li><a href="http://ask.book118.com/q/3252.html" target="_blank" class="ask_item_a"><dl class="ask_item"><dt>stochastic process</dt><dd>悬赏人民币：<span style="color:#fa0000;font-weight:bold;">50元</span></dd><dd>提问时间：2018-11-18</dd><dd>浏览量：1444次</dd></dl></a></li><li><a href="http://ask.book118.com/q/3251.html" target="_blank" class="ask_item_a"><dl class="ask_item"><dt>老街保护性规划(江阴市青阳镇南北街保护与城市设计)</dt><dd>悬赏人民币：<span style="color:#fa0000;font-weight:bold;">100元</span></dd><dd>提问时间：2018-11-17</dd><dd>浏览量：1086次</dd></dl></a></li><li><a href="http://ask.book118.com/q/3250.html" target="_blank" class="ask_item_a"><dl class="ask_item"><dt>北京专利商用化项目资助申请书</dt><dd>悬赏人民币：<span style="color:#fa0000;font-weight:bold;">100元</span></dd><dd>提问时间：2018-11-17</dd><dd>浏览量：474次</dd></dl></a></li></ul><div class="ask-show"><a href="javascript:showAsk();">我也要提问</a></div></div></div><div id="container">
+    <div>
+        <script src="cmake%E6%95%99%E7%A8%8B_files/top2.js" language="javascript"></script><div id="G3" style="position:relative;width:960px;height:48px;padding:20px 0;background-color:#244429;line-height: 24px;font-size: 16px;color: #fff;"><div style="float:left;width:310px;height: 46px;text-align: center;cursor: pointer;"><a href="https://max.book118.com/index.php?g=User&amp;m=Upload&amp;a=index" target="_blank" title="上传原创文档" style="font-size: 16px;color: #fff;border-bottom: 1px dashed #fff;text-decoration:none;cursor: pointer;">欢迎上传原创文档</a><br>在线文档交易平台，100%售出分成</div><div style="float:left;width:318px;text-align:center;height: 46px;border-left: 1px solid #fff; border-right: 1px solid #fff;cursor: pointer;">“我的文档被侵权了！？”<br><a href="javascript:claimOrFreeOrDelete.layer();;" title="认领、删除、分享" style="font-size: 16px;color: #fff;border-bottom: 1px dashed #fff;text-decoration:none;cursor: pointer;">认领、删除、分享</a>，你说了算！</div><div style="float:left;width:330px;height: 46px;text-align: center;"><a href="http://zip.book118.com/" target="_blank" title="资料包" style="font-size: 16px;color: #fff;border-bottom: 1px dashed #fff;text-decoration:none;cursor: pointer;">资料包</a> 、<a href="https://www.sc946.com/" target="_blank" title="设计素材分享" style="font-size: 16px;color: #fff;border-bottom: 1px dashed #fff;text-decoration:none;cursor: pointer;">设计素材分享</a>、<a href="http://ask.book118.com/" target="_blank" title="悬赏问答" style="font-size: 16px;color: #fff;border-bottom: 1px dashed #fff;text-decoration:none;cursor: pointer;">悬赏问答</a><br>付费咨询、能力服务、开课……研发中</div></div>
+    </div>
+    <div id="left">
+        <!--文档预览 start-->
+        <p><strong>您所在位置</strong>：<a href="https://max.book118.com/">网站首页</a> &gt; <a href="https://max.book118.com/html/docs/">海量文档</a>
+            &nbsp;&gt;&nbsp;<a href="https://max.book118.com/doclist/list-180.html">教学课件</a>&nbsp;&gt;&nbsp;<a href="https://max.book118.com/doclist/list-184.html">中学语文</a>        </p>
+        <!--<script src="/statics/js2/top.js" language="javascript"></script>-->
+        <div id="Preview" class="p_box">
+            <div class="title"><span class="doc"><img src="cmake%E6%95%99%E7%A8%8B_files/productView-pdf_46x35.gif" style="display:block; float:left;" align="absmiddle">
+                <h1>cmake教程.pdf<span id="pagenumber"> 30页</span> </h1><input value="0" id="claim" type="hidden">
+                <h2>本文档一共被下载：<span class="red"> <span id="ad_xiazaigong"> <img src="cmake%E6%95%99%E7%A8%8B_files/load.gif"></span>次 </span>,您可全文免费在线阅读后下载本文档。</h2>
+                <ul id="v-toolbar"><li id="v-toolbar-download"><a href="javascript:viewLogin.viewDl(112819683);"><img src="cmake%E6%95%99%E7%A8%8B_files/view_btn_down.gif" title="点击下载该文档" alt="支付并下载"></a></li></ul>
+                </span> </div>
+            <div class="tl_b"></div>
+            <div class="tr_b"></div>
+            <!--doc-player-->
+
+            <div>
+                            	<div class="viewPlace" data-img="//txt22262.book118.com/2017/0609/book112820/112819683.png" data-url="//view.book118.com/view/index/index?@ikRauncg@j1aw=qCpHbO3fg@utPnZAk3Q6ezA">
+                    <div class="view-btn"><a href="javascript:;" id="full"><img src="cmake%E6%95%99%E7%A8%8B_files/full.png" alt="全屏预览"></a></div>
+                    <div class="view-dialogBg" style="display: none;"></div>
+                      <div class="view-dialog" style="display: none;"><h3>
+    <span title="关闭" style="display: block;"><i class="iconfont"></i></span>下载提示</h3>
+<div class="view-dialog-content">
+    <div class="view-dialog-contentBody" data-img="">
+        <p>1、文档由网友收集上传，文档内容全部免费预览，下载前请自行辨别文档完整性；</p><p>2、该文档所得收入（下载+内容+预览）归上传者、原创作者；如果您是本文档原作者，请<a href="javascript:claimStep1();" style="text-decoration: underline;font-size:14px;">点此认领</a>！既往收益都归您。</p><p>3、登陆后可充值，立即自动返金币，充值渠道很便利。</p>        <div class="view-dialog-btn">
+            <a class="big" href="javascript:openFull(112819683);" title="同意并开始全文预览">同意并开始全文预览</a>        </div>
+    </div>
+</div></div>
+                  <img src="cmake%E6%95%99%E7%A8%8B_files/112819683.png" alt="" class="viewImg"></div>            </div>
+
+            <!--doc-player end-->
+        <img id="docSeal" src="cmake%E6%95%99%E7%A8%8B_files/seal_1.png" width="124" height="101"></div>
+        <!--文档预览 end-->
+        <!--下载地址 start-->
+        <div class="p_box" id="download" style="margin-bottom:10px;">
+            <div class="text">下载地址</div>
+            <div class="download">
+                <div class="download-r">
+                    <img src="cmake%E6%95%99%E7%A8%8B_files/bugreport.png" align="absmiddle"><a href="javascript:;" class="red complaint">文档纠错</a> &nbsp;&nbsp;
+                    <img src="cmake%E6%95%99%E7%A8%8B_files/ctrl_d.gif" align="absmiddle"><a class="favorite" href="javascript:;">收藏文档</a> &nbsp;&nbsp;
+                    <img src="cmake%E6%95%99%E7%A8%8B_files/help.png" align="absmiddle"><a href="https://max.book118.com/help.html">下载帮助</a>
+                </div>
+                <div class="download-l">
+                                        <a href="javascript:viewLogin.viewDl('112819683');" class="btn-dl">
+                        <img src="cmake%E6%95%99%E7%A8%8B_files/Point_ico.png" width="14" height="14" align="absmiddle">
+                        <span>下载源文档（pdf格式，0.32M）</span>
+                    </a>
+                                                        </div>
+            </div>
+        <div id="read_more"><ul class="read-more"><li><a href="javascript:readmore.share();" class="read-share" title="分享赚钱"><i class="ycl-iconfont"></i> 分享赚赏金</a></li><li><a href="javascript:readmore.report();" class="read-report" title="非法举报有奖"><i class="ycl-iconfont"></i> 非法举报有奖</a></li><li><a href="javascript:readmore.tort();" class="read-tort" title="文档被侵权?">文档被侵权？请点击这里,立即处理</a></li></ul></div></div>
+		<!-- Baidu Share BEGIN -->
+		<script src="cmake%E6%95%99%E7%A8%8B_files/baiduShare.js" type="text/javascript"></script>
+		<!-- Baidu Share END -->
+        <!--文档简介 start-->
+        <div id="Intro" class="p_box" style="margin-top:0;">
+            <div class="text" id="docInfo">特别说明： <font color="red">下载前务必先预览，自己验证一下是不是你要下载的文档。</font></div>
+            <div class="content">
+                <div class="docInfo">
+                    <div class="infoList">
+                        <ul>
+                            <li><strong>上传作者</strong>：<a name="downloadaddress" id="downloadaddress"></a><font color="blue"> <a rel="nofollow" href="https://max.book118.com/member/index-xcs88858-listdir-list-dirid-1.html" target="_blank" class="username">xcs88858</a></font>（上传创作收益人）</li>
+                            <li><strong>发布时间</strong>：2017-06-09</li>
+                            <li><strong>需要金币</strong>：<span class="red needmoney">200</span>(10金币=人民币1元)</li>
+                            <li><strong>浏览人气</strong>：<span id="ad_renqi">限特殊用户可见</span></li>
+                            <li><strong>下载次数</strong>：<span id="ad_xiazaicishu">限特殊用户可见</span></li>
+                            <li><strong>收藏次数</strong>：<span id="ad_shoucang">限特殊用户可见</span></li>
+                            <li><strong>文件大小</strong>：324.62 KB</li>
+                        </ul>
+                        <strong>下载过该文档的会员</strong>：<span id="ad_xiazairen"> <img src="cmake%E6%95%99%E7%A8%8B_files/load.gif"></span> </div>
+                    <div id="loadings" style="display:none"></div>
+                    <div class="vote" id="vote">    <div class="good"><a href="javascript:postDigg('good',112819683)">
+        <p>这个文档不错</p>
+        <div class="bar">
+            <div id="g_img" style="width:0%"></div>
+        </div>
+        <span class="barnum">0%(0)</span></a></div>
+    <div class="bad">
+        <a href="javascript:postDigg('bad',112819683)">
+        <p>文档有待改进</p>
+        <div class="bar">
+            <div id="b_img" style="width:0%"></div>
+        </div>
+        <span class="barnum">0%(0)</span></a>
+    </div></div>
+                    <div class="clear"></div>
+                </div>
+                <div id="viewcontent"> cmake教程</div>
+            </div>
+            <dl class="doc_guide">
+                <dt>你可能关注的文档：</dt>
+                    <dd>
+                        <ul class="prev_ten">
+                        <li>·<a title="38FSP8B9M2QT;38FSP8B5M2QT;38FSP9B7M2QT;38FSP9B5M1QT;38FSP8B8M2RT;中文规格书,Datasheet资料.pdf" href="https://max.book118.com/html/2017/0609/112818899.shtm">38FSP8B9M2QT;38FSP8B5M2QT;38FSP9B7M2QT;38FSP9B5M1QT;38FSP8B8M2RT;中文规格书,Datasheet资料.pdf</a></li><li>·<a title="38CSP7AP2M1QT;38CSP71B11M6QT;38CSP70B21M6QT;38CSP7AP2M1RT;38CSP7B11M1RT;中文规格书,Datasheet资料.pdf" href="https://max.book118.com/html/2017/0609/112818924.shtm">38CSP7AP2M1QT;38CSP71B11M6QT;38CSP70B21M6QT;38CSP7AP2M1RT;38CSP7B11M1RT;中文规格书,Datasheet资料.pdf</a></li><li>·<a title="基于嵌入式移动浏览器的QtWebkit 2.1内核研究与开发.pdf" href="https://max.book118.com/html/2017/0609/112818957.shtm">基于嵌入式移动浏览器的QtWebkit 2.1内核研究与开发.pdf</a></li><li>·<a title="TQT601用户使用说明书.pdf" href="https://max.book118.com/html/2017/0609/112818963.shtm">TQT601用户使用说明书.pdf</a></li><li>·<a title="Ubuntu 10.10 上安装 QT 5.x.pdf" href="https://max.book118.com/html/2017/0609/112819151.shtm">Ubuntu 10.10 上安装 QT 5.x.pdf</a></li><li>·<a title="QTOPIA的移植实验.pdf" href="https://max.book118.com/html/2017/0609/112819220.shtm">QTOPIA的移植实验.pdf</a></li><li>·<a title="自动化功能测试工具QTP安装指南.pdf" href="https://max.book118.com/html/2017/0609/112819238.shtm">自动化功能测试工具QTP安装指南.pdf</a></li><li>·<a title="BERNESE5.0软件的安装与使用.pdf" href="https://max.book118.com/html/2017/0609/112819243.shtm">BERNESE5.0软件的安装与使用.pdf</a></li><li>·<a title="友善之臂QQ2440V3的开发板建立 linux开发环境.pdf" href="https://max.book118.com/html/2017/0609/112819267.shtm">友善之臂QQ2440V3的开发板建立 linux开发环境.pdf</a></li><li>·<a title="水稻抽穗期基因的精细定位_克隆和生物学功能分析_郑康乐.pdf" href="https://max.book118.com/html/2017/0609/112819317.shtm">水稻抽穗期基因的精细定位_克隆和生物学功能分析_郑康乐.pdf</a></li>                        </ul>
+                        <ul class="next_ten">
+                        <li>·<a title="左旋布比卡因的临床药理学特点和毒性.pdf" href="https://max.book118.com/html/2017/0609/112819699.shtm">左旋布比卡因的临床药理学特点和毒性.pdf</a></li><li>·<a title="大陆汽车系统(天津)有限公司生产变速箱控制模块塑料腔体项目环境影响报告表.pdf" href="https://max.book118.com/html/2017/0609/112819825.shtm">大陆汽车系统(天津)有限公司生产变速箱控制模块塑料腔体项目环境影响报告表.pdf</a></li><li>·<a title="液压泵的国内外发展现状.pdf" href="https://max.book118.com/html/2017/0609/112819875.shtm">液压泵的国内外发展现状.pdf</a></li><li>·<a title="基于三层架构模式的数据库图片字段处理方法.pdf" href="https://max.book118.com/html/2017/0609/112819925.shtm">基于三层架构模式的数据库图片字段处理方法.pdf</a></li><li>·<a title="Access历年理论试题.pdf" href="https://max.book118.com/html/2017/0609/112820245.shtm">Access历年理论试题.pdf</a></li><li>·<a title="Nano2410A V2.0用户手册.pdf" href="https://max.book118.com/html/2017/0609/112820250.shtm">Nano2410A V2.0用户手册.pdf</a></li><li>·<a title="Mathcad 7.0中自嵌入函数的剖析.pdf" href="https://max.book118.com/html/2017/0609/112820337.shtm">Mathcad 7.0中自嵌入函数的剖析.pdf</a></li><li>·<a title="第2章(表的创建与操作).pdf" href="https://max.book118.com/html/2017/0609/112820379.shtm">第2章(表的创建与操作).pdf</a></li><li>·<a title="ID对齐方式.pdf" href="https://max.book118.com/html/2017/0609/112820593.shtm">ID对齐方式.pdf</a></li><li>·<a title="UG建模方法的探讨_马秋成.pdf" href="https://max.book118.com/html/2017/0609/112820623.shtm">UG建模方法的探讨_马秋成.pdf</a></li>                        </ul>
+                    </dd>
+                </dl>
+            <div>
+                <script src="cmake%E6%95%99%E7%A8%8B_files/jianjie.js" language="javascript"></script>
+            </div>
+        </div>
+        <!--文档简介 end-->
+        <div>
+            <script src="cmake%E6%95%99%E7%A8%8B_files/down.js" language="javascript"></script>如何购买下载本文档？答：①<a href="http://max.book118.com/member/index.php" target="_blank"><u>登录(支持支付宝、QQ快捷登录)</u></a>-&gt;②选择金币数充值(根据提示操作)-&gt;③冲完后系统会自动反金币（实时）-&gt;④下载文档。如何获得该文档(下载该文档）的流程<a href="https://max.book118.com/html/2011/1108/723890.shtm" target="_blank"><u>查看图文教程</u></a><br>
+<font color="blue">若本文有一长串的文字简介内容，则表明本文档是正常的，可以下载(但不保证完整)！(只截取一部分内容)：</font><br><br>
+
+        </div>
+        <!--下载地址 end-->
+        <div>            
+前言 
+   cmake 已经开发了5,6 年的时间，如果没有KDE4 ，也许不会有人或者Linux 发行版本重视 
+cmake ，因为除了Kitware 似乎没有人使用它。通过KDE4 的选型和开发，cmake 逐渐进入了人们的视 
+线，在实际的使用过程中，cmake 的优势也逐渐的被大家所认识，至少KDE 的开发者们给予了cmake 
+极高的评价，同时庞大的KDE 项目使用cmake 来作为构建工具也证明了cmake 的可用性和大项目管理 
+能力。所以，cmake 应该感谢KDE ，也正因为如此，cmake 的开发者投入了KDE 从autotools 到 
+cmake 的迁移过程中，并相当快速和顺利的完成了迁移，现在整个KDE4 开发版本全部使用cmake 构 
+建。这也是促使我们学习cmake 的原因，首先cmake 被接受并成功应用，其次，cmake 的优势在实际 
+使用中不断的体现出来。 
+   我们为什么不来认识一下这款优秀的工程构建工具呢？ 
+   在2006 年KDE 大会，听cmake 开发者当面介绍了cmake 之后，我就开始关注cmake ，并将 
+cmake 纳入了Everest 发行版，作为系统默认组件。最近QT-4.3 也正式进入了Everest 系统，为KDE4 
+构建完成了准备工作。但是，在学习cmake 的过程中，发现官方的文档非常的少，而且错误也较多，比 
+如在介绍Find&lt;Name&gt;模块编写的文档中，模块名称为FOO ，但是后面却出现了 
+Foo_FIND_QUIETLY 的定义，这显然是错误的，这样的定义永远不可能有效，正确的定义是 
+FOO_FIND_QUIETLY。种种原因，促使我开始写一份“面向使用和实用”的cmake 文档，也就是本 
+教程《cmake 实践》(Cmake Practice) 
+本文档是边学习边编写的成果，更像是一个学习笔记和Tutorial ，因此难免有失误或者理解不够透彻的地 
+方，比如，我仍然不能理解为什么绝大部分使用变量的情况要通过${}引用，而在IF 语句中却必须直接 
+使用变量名。也希望能够有cmake 的高手来指点迷津。 
+补：从cmake 的maillist,我找到了一些答案，原文是：The `IF(var)' or `IF(NOT var)' command  
+expects `var' to be the name of a variable. This is stated in CMake's manual. So, for your 
+situation `IF(${libX})' is the same as `IF(/usr/lib/xorg)' and then CMake will check the value of the  
+variable named `/usr/lib/xorg'.也就是说IF 需要的是变量名而不是变量值这个文档是开放的，开放的目 
+的是为了让更多的人能够读到并且能够修改，任何人都可以对它作出修改和补充，但是，为了大家都能 
+够获得你关于 cmake 的经验和积累，如果你现错误或者添加了新内容后，请务必CC 给我一份，让我们 
+共同把 cmake 掌握的更好。 
+一，初识cmake 
+Cmake 不再使你在构建项目时郁闷地想自杀了. 
+1 ，背景知识： 
+cmake 是kitware 公司以及一些开源开发者在开发几个工具 件(VTK)的过程中衍生品，最终形成体系， 
+成为一个独立的开放源代码项目。项目的诞生时间是2001 年。其官方网站是 ，可以通 
+过访问官方网站获得更多关于 cmake 的信息。cmake 的流行其实要归功于 KDE4 的开发(似乎跟当年的 
+svn 一样，KDE 将代码仓库从CVS 迁移到SVN ，同时证明了SVN 管理大型项目的可用性) ，在KDE 
+开发者使用了近10 年autotools 之后，他们终于决定为KDE4 选择一个新的工程构建工具，其根本原因 
+用KDE 开发者的话来说就是：只有少数几个“编译专家”能够掌握 KDE 现在的构建体系 
+(admin/Mmon) ，在经历了unsermake, scons 以及 cmake 的选型和尝试之后，KDE4 决定 
+使用cmake 作为自己的构建系统。在迁移过程中，进展异常的顺利，并获得了cmake 开发者的支持。所 
+以，目前的KDE4 开发版本已经完全使用cmake 来进行构建。像kdesvn,rosegarden 等项目也开始使用 
+cmake ，这也注定了cmake 必然会成为一个主流的构建体系。 
+2 ，特点： 
+cmake 的特点主要有： 
+    1，开放源代码，使用类 BSD 许可发布。/HTML/Copy <br>
+            <br>
+ </div>
+        <!--发表评论 start-->
+        <div id="Comment_box" class="p_box">
+            <div class="text">发表评论</div>
+            <!-- //AJAX评论区 -->
+			<!--评论 begin-->
+			<div id="feedback" class="doc-info-r">
+			  <p>
+			  </p><form action="#" method="post" name="feedback">
+			    <input name="dopost" value="send" type="hidden">
+			    <input name="comtype" value="comments" type="hidden">
+			    <input name="aid" value="112819683" type="hidden">
+			    <input name="fid" id="feedbackfid" value="0" type="hidden">
+			    <div class="dcmp-title"> <small>请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论。</small> </div>
+			   
+			    <div class="dcmp-content">
+			      <textarea cols="60" name="msg" rows="5" class="ipt-txt"></textarea>
+			    </div>
+			    <!-- /dcmp-content -->
+			    <div class="clr"></div>
+			    <div class="dcmp-post">
+			      <!--未登陆-->
+			      <div class="dcmp-userinfo" id="_ajax_feedback">用户名:<input name="username" size="16" class="ipt-txt" type="text"> 验证码:<input name="validate" size="4" class="ipt-txt" style="text-transform:uppercase;" type="text"><img src="cmake%E6%95%99%E7%A8%8B_files/detail-code.png" id="validateimg" style="cursor:pointer" onclick="this.src='/index.php?m=Public&amp;a=verify&amp;'+Math.random()" title="点击我更换图片" alt="点击我更换图片"><input name="notuser" id="dcmp-submit-guest" type="checkbox"><label for="dcmp-submit-guest"> 匿名? </label>
+</div>
+			      <script language="javascript" type="text/javascript">CheckCommentLogin();</script>
+			      <div class="dcmp-submit">
+			        <button type="button" onclick="PostComment()">发表评论</button>
+			      </div>
+			    </div>
+			  </form>
+			  <p></p>
+			</div>
+			<!--评论 end-->
+			<!--最新评论-->
+			<div id="feedback" class="doc-info-r">
+			  <!-- //这两个ID的区块必须存在，否则JS会出错 -->
+			  <div id="commetcontentNew"></div>
+			  <div id="commetcontent"><div id="commetpages" style="float: right;padding: 10px;">共 <strong style="color:red">0</strong> 条评论</div>
+</div>
+			</div>
+			<!--最新评论 end-->
+			<!--
+			//由于评论载入时使用异步传输，因此必须在最后一步加载（DIGG和评论框须放在评论内容前面）
+			//如果一定需要提前的把myajax.SendGet改为myajax.SendGet2，但可能会引起页面阻滞
+			-->
+			<script language="javascript">
+			function LoadCommets(page)
+			{
+					var taget_obj = document.getElementById('commetcontent');
+					var waithtml = "<div style='line-height:50px'><img src='/images/loadinglit.gif' />评论加载中...</div>";
+					var myajax = new Book118Ajax(taget_obj, true, true, '', 'x', waithtml);
+					myajax.SendGet2("/index.php?m=Ajax&a=feedback&action=lists&aid=112819683&page="+page);
+					book118XHTTP = null;
+			}
+			function PostComment()
+			{
+					var f = document.feedback;
+					var nface = '6';
+					var nfeedbacktype = 'feedback';
+					var nvalidate = '';
+					var nnotuser = '';
+					var nusername = '';
+					var npwd = '';
+					var taget_obj = $DE('commetcontentNew');
+					var waithtml = "<div style='line-height:30px'><img src='/images/loadinglit.gif' />正在发送中...</div>";
+					if(f.msg.value=='')
+					{
+						alert("评论内容不能为空！");
+						return;
+					}
+					if(f.validate)
+					{
+						if(f.validate.value=='') {
+							alert("请填写验证码！");
+							return;
+						}
+						else {
+							nvalidate = f.validate.value;
+						}
+					}
+					if(f.msg.value.length > 500)
+					{
+						alert("你的评论是不是太长了？请填写500字以内的评论。");
+						return;
+					}
+					if(f.feedbacktype) {
+						for(var i=0; i < f.feedbacktype.length; i++)
+							if(f.feedbacktype[i].checked) nfeedbacktype = f.feedbacktype[i].value;
+					}
+					if(f.face) {
+						for(var j=0; j < f.face.length; j++)
+							if(f.face[j].checked) nface = f.face[j].value;
+					}
+					if(f.notuser.checked) nnotuser = '1';
+					if(f.username) nusername = f.username.value;
+					if(f.pwd) npwd = f.pwd.value;
+
+					var myajax = new Book118Ajax(taget_obj, false, true, '', '', waithtml);
+					myajax.sendlang = 'utf-8';
+					myajax.AddKeyN('dopost', 'send');
+					myajax.AddKeyN('aid', '112819683');
+					myajax.AddKeyN('fid', f.fid.value);
+					myajax.AddKeyN('face', nface);
+					myajax.AddKeyN('feedbacktype', nfeedbacktype);
+					myajax.AddKeyN('validate', nvalidate);
+					myajax.AddKeyN('notuser', nnotuser);
+					myajax.AddKeyN('username', nusername);
+					myajax.AddKeyN('pwd', npwd);
+					myajax.AddKeyN('msg', f.msg.value);
+					myajax.SendPost2('/index.php?m=FeedBack&a=send');
+					f.msg.value = '';
+					f.fid.value = 0;
+					if(f.validate)
+					{
+						if($DE('validateimg')) $DE('validateimg').src = "/index.php?m=Public&a=verify&"+f.validate.value;
+						f.validate.value = '';
+					}
+			}
+			function quoteCommet(fid)
+			{
+				document.feedback.fid.value = fid;
+			}
+			LoadCommets(1);
+			</script>
+			<!-- //评论内容区结束 -->
+        </div>
+        <!--发表评论 end-->
+    </div>
+    <div id="right">
+        <!--文档上传者 start-->
+        <!--文档上传者 end-->
+        <!--本站搜索 start-->
+        <div id="re_search" class="re_data g_box" style="display:none;">
+            <div class="title">你可能感兴趣的有...</div>
+            <div id="pushListContent" class="pushListContent">
+                正在加载中，请稍后...
+            </div>
+            <div class="tl_b"></div>
+            <div class="tr_b"></div>
+            <div class="bl_b"></div>
+            <div class="br_b"></div>
+        </div>
+        <!--本站搜索 end-->
+        <!--相关文档 start-->
+        <div id="re_relate" class="re_data g_box">
+            <div class="title">
+                <span>相似文档</span>
+                <a id="more-doc" title="更多关于《cmake教程.pdf》文档" search-title="cmake教程.pdf" href="javascript:;">更多<img src="cmake%E6%95%99%E7%A8%8B_files/more.gif"></a>
+            </div>
+            <div>
+            <iframe scrolling="no" src="cmake%E6%95%99%E7%A8%8B_files/index.html" width="255" height="450" frameborder="0"></iframe>
+            </div>
+            <div class="tl_b"></div>
+            <div class="tr_b"></div>
+            <div class="bl_b"></div>
+            <div class="br_b"></div>
+        </div>
+        <!--相关文档 end-->
+                <!--相关文档 start-->
+        <div id="re_latestdown" class="re_data g_box">
+            <div class="title">最近下载</div>
+            <div>
+                <ul>
+                    <li><a title="基于语言复活 学生思考力的培养 （一）.ppt" href="https://max.book118.com/html/2018/0917/7103153023001150.shtm">基于语言复活 学生思考力的培养 （一）.ppt</a></li><li><a title="教学效果评估表.doc" href="https://max.book118.com/html/2015/0723/21786321.shtm">教学效果评估表.doc</a></li><li><a title="OF KINDNESS - The BridgeMaker：善良的bridgemaker.pdf" href="https://max.book118.com/html/2016/0318/37968570.shtm">OF KINDNESS - The BridgeMaker：善良的bridgemaker.pdf</a></li><li><a title="2017智慧树创践大学生创新创业实务章节满分答案.pdf" href="https://max.book118.com/html/2017/1117/140380046.shtm">2017智慧树创践大学生创新创业实务章节满分答案.pdf</a></li><li><a title="北京蓝色港湾商业综合体调研.ppt" href="https://max.book118.com/html/2017/0508/105355133.shtm">北京蓝色港湾商业综合体调研.ppt</a></li><li><a title="万吨年聚醚(万吨年PPG聚醚万吨年POP聚醚)扩能项目要点.doc" href="https://max.book118.com/html/2016/0517/43185425.shtm">万吨年聚醚(万吨年PPG聚醚万吨年POP聚醚)扩能项目要点.doc</a></li><li><a title="肉牛高效养殖技术-肉牛牦牛产业体系.PDF" href="https://max.book118.com/html/2018/0303/155585132.shtm">肉牛高效养殖技术-肉牛牦牛产业体系.PDF</a></li><li><a title="[高清无水印文件小可查询 ]中国地震动参数区划图 GB18306-2015.pdf" href="https://max.book118.com/html/2017/0531/110686905.shtm">[高清无水印文件小可查询 ]中国地震动参数区划图 GB18306-2015.pdf</a></li><li><a title="儿童充气玩具投资项目可行性研究报告.doc" href="https://max.book118.com/html/2018/1010/7201111034001152.shtm">儿童充气玩具投资项目可行性研究报告.doc</a></li><li><a title="音乐课堂教学激发学生兴趣的研究结题报告.doc" href="https://max.book118.com/html/2018/0626/7150024020001135.shtm">音乐课堂教学激发学生兴趣的研究结题报告.doc</a></li>                </ul>
+            </div>
+            <div class="tl_b"></div>
+            <div class="tr_b"></div>
+            <div class="bl_b"></div>
+            <div class="br_b"></div>
+        </div>
+        <!--相关文档 end-->
+    </div>
+    <div class="clear"></div>
+</div>
+<!-- /foot 开始 -->
+<!-- //底部模板 -->
+<div id="foot_k">
+    <ul>
+        <li>
+            <dl>
+                <dt><a href="https://max.book118.com/about.html" target="_blank">关于我们</a></dt>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt><a href="https://max.book118.com/help1.html" target="_blank">投稿赚钱</a></dt>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt><a href="https://max.book118.com/help2.html" target="_blank">积分说明</a></dt>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt><a href="https://max.book118.com/help3.html" target="_blank">上传下载</a></dt>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt><a href="https://max.book118.com/help4.html" target="_blank">联系我们</a></dt>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt><a href="https://max.book118.com/help5.html" target="_blank">版权处理</a></dt>
+            </dl>
+        </li>
+    </ul>
+    <p class="copy">©2010-2013 max.book118.com在线文档投稿赚钱网. All Rights Reserved <a href="http://www.miibeian.gov.cn/" target="_blank">蜀ICP备08101938号</a></p>
+    <script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/twatch_log.js"></script>文档投稿赚钱网是网络服务平台方，若您的权利被侵害，请联系<span class="max_infringement_qq">3005833200</span>@qq.com。网站上传投稿者QQ群:<span class="max_qq_group">784321556</span>。<br>
+<a href="https://max.book118.com/zhaopin.html" target="_blank">本站人才招聘</a>
+<script src="cmake%E6%95%99%E7%A8%8B_files/11.js" id="sozz"></script><script charset="utf-8" src="cmake%E6%95%99%E7%A8%8B_files/ab77b6ea7f3fbf79.js"></script>工信部备案号：<a href="http://www.miibeian.gov.cn/" target="_blank">蜀ICP备08101938号-1</a>，<img src="cmake%E6%95%99%E7%A8%8B_files/beian.png" border="0">公安局备案号：51011502000106 &nbsp; 成都原创力网络科技有限公司
+
+</div>
+<!-- /footer -->
+
+
+<script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/newLogin.js"></script><script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/layer.js"></script><script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/jquery-ui.js"></script><script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/search.js"></script><script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/emailAutoComplate.js"></script><script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/layer.js"></script><input id="payStatus" value="0" type="hidden"><script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/promote.js"></script><div id="bigAutocompleteContent" class="bigautocomplete-layout"></div><div id="side_customer"><div class="customer-hd"><span>在线客服</span><a class="customer-close" href="javascript:side_customer.close();" title="关闭">&nbsp;</a></div><ul class="customer-qq"><li class="autochat"><a href="https://max.book118.com/index.php?g=Home&amp;m=Chat&amp;a=index" target="_blank"><i class="customer-icon-auto-chat">&nbsp;</i><em>&nbsp;</em> <strong>在线智能回复</strong><span>24小时为您服务</span></a></li><li class="qqchat qq-download"><a href="javascript:;" onclick="side_customer.tencent(this)" qq="3005480250" title="上班时间：9:00 -19:00 （工作日）
+其他时段，不保证客服一直在线。
+请尽量使用在线智能回复"><i class="customer-icon-qq">&nbsp;</i> <em>&nbsp;</em> <span>文档下载咨询</span></a></li><li class="qqchat qq-tort"><a href="javascript:;" onclick="side_customer.tencent(this)" qq="3005833200" title="侵权投诉处理"><i class="customer-icon-qq">&nbsp;</i> <em>&nbsp;</em> <span>侵权投诉处理</span></a></li><li class="qqchat qq-upload"><a href="javascript:;" onclick="side_customer.tencent(this)" qq="3005480250" title="文档上传咨询"><i class="customer-icon-qq">&nbsp;</i> <em>&nbsp;</em> <span>文档上传咨询</span></a></li><li class="qqchat qq-feedback"><a href="javascript:;" onclick="side_customer.tencent(this)" qq="303444452" title="网站建议反馈"><i class="customer-icon-qq">&nbsp;</i> <em>&nbsp;</em> <span>网站建议反馈</span></a></li><li class="qqchat question"><a href="javascript:side_customer.question()"><i class="customer-icon-question">&nbsp;</i><strong>网站常见问题</strong></a></li><li class="group"><a target="_blanck" href="https://shang.qq.com/wpa/qunwpa?idkey=a18a512e7df4ed994028ee2e73299468884f6ae18a55a12d950ef18d9c4893a2" title="加入上传QQ群">上传QQ群:784321556</a></li></ul></div><div id="promote">
+
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="cmake%E6%95%99%E7%A8%8B_files/layer.css" rel="stylesheet" type="text/css">
+    <title>悬赏问答网</title>
+    <style type="text/css">
+        ul li{list-style-type:none;border:none}table{border-collapse:collapse;border-spacing:0}input,textarea{border:none}a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video{margin:0;padding:0;border:0;outline:0}html{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;overflow-x:hidden}table{border-collapse:collapse}address,article,aside,details,dialog,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}::-ms-clear,::-ms-reveal{display:none}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:'';content:none}a{margin:0;padding:0;font-size:100%;transition:.3s;-webkit-transition:.3s;-moz-transition:.3s;vertical-align:baseline;background:0 0;text-decoration:none}.clearfix:after{height:0;content:"";display:block;clear:both;visibility:hidden;font-size:0}.clearfix{zoom:1}* html .clearfix{zoom:1}.mainbox{position:fixed;font-family:"宋体";font-size:12px width:310px;right:0;bottom:0;z-index:99}.questionsd{width:345px;border:1px solid #3cb501}.questionsdtop{width:345px;border-left:1px solid #3cb501;border-right:1px solid #3cb501;border-top:1px solid #3cb501;background-color:#fff}.questionsdtop a.doc_question{display: block;float:left;line-height: 24px;padding: 0 6px;text-decoration: none; border-radius: 3px; background-color: #3cb501;color:#fff;}#close_corner_top{background:url(https://max.book118.com/static/promote/images/closes_green.png) center no-repeat}.quesstop{background:#dcf0d3;height:39px}.quesstop .quelogo{float:left;margin-left:8px;padding-top:7px}.quesstop strong.quesstitle{display:block;float:left;height:39px;line-height:38px;padding-left:6px;font-size:14px;font-weight:600;color:#3CB501}.quesstop i.quesshorn{display:block;float:left;width:14px;height:12px;margin-top:13px;background:url(https://max.book118.com/static/promote/images/notice.png) center no-repeat}.quesstop marquee{display:block;float:left;width:224px;height:39px;line-height:38px;margin-left:6px;font-size:12px;color:#000}.queclose{display:block;width:22px;height:22px;background:url(https://max.book118.com/static/promote/images/closes.png) center no-repeat;float:right;cursor:pointer;margin-top:8px;margin-right:7px;transition:.38s}.queclose:hover{transform:rotate(180deg);-webkit-transform:rotate(180deg);-moz-transform:rotate(180deg)}.questewr{padding:5px 7px 12px 8px;background:#fff}.noticeds{border-radius:12px;background:#dcf0d3;height:29px;line-height:29px;padding-left:22px;position:relative}b{font-family:Georgia;font-size:12px;font-weight:400;color:red}dl.queshead{height: 20px;overflow: hidden;font-size: 12px;}dl.queshead dt{float: left;}dl.queshead dd{float: right;}dl.queshead a{display:inline-block;height:17px;line-height:17px;padding:0 3px;border:1px solid #333;border-radius:2px;color:#1e5495;text-decoration:none}.questable{margin-top:4px}.questablebcontainer{border:1px solid #a0c58f}ul.questhead{width:100%;background:#dcf0d3;height:20px;text-align:center}ul.questbody{width:100%;height:20px;line-height:20px;border-top:1px solid #A0C58F}ul.questbody li,ul.questhead li{float:left;height:20px;line-height:20px}li.questh1{width:160px}li.questh2{width:166px;border-left:1px solid #A0C58F}li.questh3{width:74px;border-left:1px solid #A0C58F;text-align:center}a.questda{display:inline-block;width:62px;height:20px;line-height:20px;background-color:#3CB501;color:#fff;border-radius:3px}li.questd1{width:147px;padding:0 8px 0 5px}li.questd2{max-width:90px;min-width:50px;padding-left:5px;border-left:1px solid #A0C58F}li.questd3{width:70px;text-align:center;font-size:10px;color:#666}a.questitle{position:relative;display:block;width:148px;height:20px;line-height:20px;font-size:12px;color:#333;overflow:hidden}a.questitle span{position:absolute;left:0;top:0;white-space:nowrap}a.questitle:hover{color:#3CB501}.questdown{margin-top:1px}.questdown p{color:#1e5495;font-size:12px;line-height:19px;margin-top:6px}.questdown p b{display:inline-block;font-weight:400;color:red;margin:0 4px}.questdown p a{display:inline-block;height:17px;line-height:17px;padding:0 3px;border:1px solid #333;border-radius:2px;color:#1e5495;text-decoration:none}.popmark{width:100%;height:100%;z-index:991;position:fixed;left:0;top:0;display:none}.popbgs{position:absolute;left:0;top:0;background:rgba(0,0,0,.5);filter:progid:DXImageTransform.Microsoft.gradient(startcolorstr=#7f000000, endcolorstr=#7f000000);width:100%;height:100%}.questwrs{width:500px;position:absolute;left:50%;margin-left:-260px;top:50%;background:rgba(255,255,255,.5);padding:10px;filter:progid:DXImageTransform.Microsoft.gradient(startcolorstr=#7fffffff, endcolorstr=#7fffffff)}.questbg{background:#fff}.questfix{background:#dcf0d3;height:40px}.questfix .quelogo{margin-left:13px;margin-top:8px;float:left}.questfix p{color:#333;font-size:14px;line-height:40px;margin-left:58px;float:left;font-weight:700}.questeds{padding:18px 16px 25px}.questeds p{color:#000;font-size:12px;line-height:1.4;margin-bottom:8px}.questeds .quests{padding-left:8px;width:458px;height:38px;line-height:38px;background:#fff;color:#000;border:1px solid #ddd;border-radius:3px;outline:0;margin-bottom:34px;transition:.34s}.questeds .quests:focus{border-color:#3cb501}.steps{text-align:center}.steps a{display:inline-block;width:94px;height:31px;text-align:center;line-height:31px;color:#fff;font-size:14px;border-radius:2px;margin-left:15px;background:#bbb}.steps a:frist-child{margin-left:0}.steps a.lastd,.steps a:hover{background:#3cb501}.questebox1 .questwrs{margin-top:-115px}.questebox2 .questwrs{margin-top:-191px}.questebox3 .questwrs{margin-top:-146px}.questebox4 .questwrs{margin-top:-146px}.questebox5 .questwrs{margin-top:-141px}.qustext{padding:8px 10px;width:444px;height:134px;color:#000;border:1px solid #ddd;background:#fff;border-radius:3px;outline:0;box-sizing:content-box;resize:none;margin-top:5px;margin-bottom:5px}.questeds p a{display:inline-block;color:#1e5495;text-decoration:underline}.questeds p a:hover{color:#3cb501}.questradio{margin-top:10px}.radioin{float:left;margin-left:27px}.radioin:first-child{margin-left:0}.radioin label{display:inline;color:#000;font-size:14px;line-height:28px;cursor:pointer;float:left}.radioin label .radios{display:inline-block;width:14px;height:14px;margin:0;vertical-align:middle;margin-right:5px;position:relative;top:-2px}.radioin .ratext{width:58px;height:26px;line-height:26px;text-align:center;color:#000;font-size:14px;border-radius:3px;border:1px solid #ddd;background:#fff;outline:0;margin-left:4px}.questrai{margin-top:18px}.questrai p{display:block;line-height:1.4;color:#f45353;font-size:12px}.questrai p b{display:inline-block}.questfous{padding:40px 0 16px;width:390px;margin:auto;text-align:center}.questsucess{margin-left:88px}.questsucess i{display:block;width:20px;height:20px;background:url(https://max.book118.com/static/promote/images/suce.png) center no-repeat;float:left;margin-right:5px}.questsucess span{display:block;float:left;line-height:20px;color:#000;font-size:16px}.asknet{padding:6px 0;border:1px solid #ddd;margin-top:14px;background:#fff7f0;text-align:center}.asknet p{color:#333;font-size:12px;line-height:1.6}.asknet p a{display:inline-block;color:#333;font-weight:700}.asknet p a.res{color:red;text-decoration:underline}.asknet p a:hover{color:#3cb501}.steps .stepde{width:auto;padding:0 6px}.promote-layer a.layui-layer-close{width:22px;height:22px;background:url(https://max.book118.com/static/promote/images/closes.png) center no-repeat!important;cursor:pointer;margin-top:-5px;transition:.38s}.promote-layer .layui-layer-title{color:#333 !important;}
+    </style>
+
+
+
+
+
+</div><script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/right_corner.js"></script><script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/pask.js"></script><script type="text/javascript" src="cmake%E6%95%99%E7%A8%8B_files/page.js"></script><div class="layui-layer-move" style="cursor: move; display: none;"></div><div class="layui-layer-shade" id="layui-layer-shade100002" times="100002" style="z-index:19991015; background-color:#000; opacity:0.6; filter:alpha(opacity=60);"></div><div class="layui-layer layui-layer-page  layer-anim-02" id="layui-layer100002" type="page" times="100002" showtime="0" contype="string" style="z-index: 19991016; width: 85%; height: 90%; top: 42px; left: 113.5px;"><div class="layui-layer-title" style="cursor: move;">全屏预览 [cmake教程.pdf] --欢迎下载，永久保存到你电脑。如预览无反应,请关闭预览后重试打开！</div><div id="" class="layui-layer-content" style="height: 718px;"><iframe id="layer_view_iframe" scrolling="auto" allowtransparency="true" src="//view45.book118.com/?readpage=zhlXokple9USTISH5oPCdg==&amp;furl=o4j9ZG7fK94ywCJ0aQkdUad3YkM4Kc1@bPc_5q6yqfMcdR5aGeBGGIbO5EM6ZuJYSMP@UwKe2N0thN5dgjahh@ZDUuIfbIk@WNxgapxQy@Q=&amp;n=1" width="100%" height="100%" frameborder="0"></iframe><div class="newClaim" style="margin-right: -483px; top: 280px;"><img src="cmake%E6%95%99%E7%A8%8B_files/claim.png" alt="认领该文档" title="认领该文档"></div><div class="newClaim-t" style="margin-left: -501px; left: 50%; top: 280px;"><img src="cmake%E6%95%99%E7%A8%8B_files/claim.png" alt="认领该文档" title="认领该文档"></div><div class="newDown" style="margin-right: -482px; top: 61px;"><img src="cmake%E6%95%99%E7%A8%8B_files/down.gif" alt="下载该文档" title="下载该文档"></div><div class="newDown-t" style="margin-left: -501px; left: 50%; top: 61px;"><img src="cmake%E6%95%99%E7%A8%8B_files/down.gif" alt="下载该文档" title="下载该文档"></div></div><span class="layui-layer-setwin"><a class="layui-layer-ico layui-layer-close layui-layer-close1" href="javascript:;"></a></span><span class="layui-layer-resize"></span></div></body></html>

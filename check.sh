@@ -33,7 +33,7 @@ _find_file_ ()
 if [ $# = 1 ]; then
     _find_file_ $1
 else
-    _find_file_ S40networking.sh
+    _find_file_ S40networking
     _find_file_ S40dropbear.sh
     _find_file_ gdbserver
     _find_file_ S40utelnetd.sh
