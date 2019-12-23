@@ -1,5 +1,5 @@
 #!/bin/sh
-sudo cp /media/sf_share/root.ext4 ~
+sudo cp /mnt/hgfs/share/upgrade/root.ext4 ~
 MOUNT_DIR=/tmp/rootfs
 if [ -d $MOUNT_DIR ]; then
     sudo umount $MOUNT_DIR 2>/dev/null
