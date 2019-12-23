@@ -1,0 +1,44 @@
+#!/bin/bash
+#export LD_LIBRARY_PATH=../iDM/libamd64:$LD_LIBRARY_PATH
+#arm-poky-linux-protoc --cpp_out=./ *.proto 
+
+#ls *.md5_
+#if [ ! -f .old_log ];then
+    #export LD_LIBRARY_PATH=../iDM/libamd64:$LD_LIBRARY_PATH
+    #arm-poky-linux-protoc --cpp_out=./ *.proto 
+    #ls *.proto | xargs md5sum > .old_log
+#else
+    #ls *.proto | awk -F '.' '{ 
+    #md5_name=".md5_"$1;
+    #cmd="md5sum "$0" > "md5_name;
+    #system(cmd)
+#}'
+#fi
+
+export LD_LIBRARY_PATH=../iDM/libamd64:$LD_LIBRARY_PATH
+compile_proto()
+{
+    echo "compile $1 ..."
+    arm-poky-linux-protoc --cpp_out=./ $1 
+}
+
+make_md5()
+{
+    echo $1 | awk '{cmd="md5sum "$0" > ."$0".md5"; system(cmd)}'
+}
+
+FileList=`ls *.proto`
+
+for file in `ls *.proto` 
+do
+    if [ ! -f ".$file.md5" ];then
+        make_md5 $file
+        compile_proto $file
+    else
+        md5_file="."$file".md5"
+        if [ "OK" != `md5sum -c $md5_file | awk '{ print $2 }'` ];then
+            make_md5 $file
+            compile_proto $file
+        fi
+    fi
+done
